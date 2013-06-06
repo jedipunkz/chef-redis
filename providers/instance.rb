@@ -19,10 +19,6 @@ def load_current_resource
   new_resource.configure_list_max_ziplist
   new_resource.configure_maxmemory_samples
   new_resource.configure_set_max_intset_entries
-  new_resource.configure_zset_max_ziplist_entries
-  new_resource.configure_zset_max_ziplist_value
-  new_resource.configure_hash_max_ziplist_entries
-  new_resource.configure_hash_max_ziplist_value
   new_resource.conf_dir
 
   new_resource.state # Load attributes
@@ -90,7 +86,8 @@ end
 
 def create_config
   redis_service_name = redis_service
-  template "#{new_resource.conf_dir}/#{new_resource.name}.conf" do
+  #template "#{new_resource.conf_dir}/#{new_resource.name}.conf" do
+  template "#{new_resource.conf_dir}/redis.conf" do
     source "redis.conf.erb"
     owner "root"
     group "root"
@@ -118,9 +115,9 @@ end
 def set_dst_dir
   case node.platform_family
   when "rhel", "fedora"
-    node.set[:redis][:dst_dir] = "/usr/sbin/"
+    node.set[:redis][:dst_dir] = "/usr/sbin"
   when "debian"
-    node.set[:redis][:dst_dir] = "/usr/bin/"
+    node.set[:redis][:dst_dir] = "/usr/bin"
   end
 end
 
